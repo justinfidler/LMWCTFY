@@ -10,7 +10,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Let Me Wirecutter That For You</title>
+    <title>Wirecutter: Reviews for the Real World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -19,78 +22,159 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        /* NYT Header Bar */
+        .nyt-bar {
+            background: #000;
+            padding: 8px 20px;
+            display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+        }
+
+        .nyt-logo {
             color: #fff;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
-        .container {
-            text-align: center;
-            padding: 2rem;
+        .nyt-subscribe {
+            color: #fff;
+            font-size: 11px;
+            text-decoration: none;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            color: #e94560;
-            margin-bottom: 3rem;
-            font-weight: bold;
+        /* Wirecutter Header */
+        .header {
+            background: #fff;
+            border-bottom: 1px solid #e6e6e6;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 22px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: #000;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: #c90223;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .search-toggle svg {
+            width: 20px;
+            height: 20px;
+            color: #000;
+        }
+
+        /* Main Search Area */
+        .search-page {
+            flex: 1;
+            background: #f7f7f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px;
+        }
+
+        .search-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 32px;
         }
 
         .search-box {
-            background: #fff;
-            border-radius: 24px;
-            padding: 12px 24px;
+            width: 100%;
+            max-width: 680px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            max-width: 600px;
-            margin: 0 auto;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            background: #fff;
+            border: 2px solid #000;
+            border-radius: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            min-height: 56px;
         }
 
         .search-icon {
             color: #666;
-            font-size: 1.2rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .search-icon svg {
+            width: 20px;
+            height: 20px;
         }
 
         .search-input {
             flex: 1;
-            border: none;
-            outline: none;
-            font-size: 1.1rem;
-            color: #333;
-            background: transparent;
-            min-width: 300px;
-        }
-
-        .search-btn {
-            background: #e94560;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 1rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .search-btn.visible {
-            opacity: 1;
+            font-size: 16px;
+            color: #000;
+            font-family: inherit;
         }
 
         .cursor {
             display: inline-block;
             width: 2px;
-            height: 1.2em;
-            background: #333;
+            height: 20px;
+            background: #c90223;
             animation: blink 1s infinite;
-            vertical-align: text-bottom;
+            margin-left: 1px;
         }
 
         @@keyframes blink {
@@ -98,22 +182,40 @@
             51%, 100% { opacity: 0; }
         }
 
-        .message {
-            margin-top: 3rem;
-            font-size: 1.5rem;
+        .search-btn {
+            background: #c90223;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            height: 100%;
+            min-height: 56px;
             opacity: 0;
-            transition: opacity 0.5s;
+            transition: opacity 0.3s, background 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .message.visible {
+        .search-btn:hover {
+            background: #a50119;
+        }
+
+        .search-btn.visible {
             opacity: 1;
         }
 
+        /* Feedback */
+        .feedback {
+            text-align: center;
+            margin-top: 48px;
+        }
+
         .arrow {
-            font-size: 3rem;
-            margin: 2rem 0;
+            font-size: 36px;
+            color: #c90223;
             opacity: 0;
-            animation: none;
         }
 
         .arrow.visible {
@@ -126,33 +228,92 @@
             50% { transform: translateY(-10px); }
         }
 
-        .wirecutter-badge {
-            display: inline-block;
-            background: #e94560;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-weight: bold;
+        .message {
+            margin-top: 24px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #000;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .message.visible {
+            opacity: 1;
+        }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            color: #fff;
+            padding: 16px 20px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .footer a {
+            color: #c90223;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            Let Me <span class="wirecutter-badge">Wirecutter</span> That For You
+    <!-- NYT Top Bar -->
+    <div class="nyt-bar">
+        <span class="nyt-logo">The New York Times</span>
+        <a href="#" class="nyt-subscribe">Subscribe</a>
+    </div>
+
+    <!-- Wirecutter Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="https://images.seeklogo.com/logo-png/38/1/wirecutter-logo-png_seeklogo-385938.png" alt="Wirecutter" class="logo-img">
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="nav-link">Electronics</a>
+                <a href="#" class="nav-link">Home & Garden</a>
+                <a href="#" class="nav-link">Kitchen</a>
+                <a href="#" class="nav-link">Sleep</a>
+                <a href="#" class="nav-link">Gift Guides</a>
+            </nav>
+            <div class="header-right">
+                <button class="search-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
+    </header>
+
+    <!-- Search Page Content -->
+    <main class="search-page">
+        <h1 class="search-title">Search Wirecutter</h1>
 
         <div class="search-box">
-            <span class="search-icon">&#128269;</span>
-            <span class="search-input"><span id="typedText"></span><span class="cursor" id="cursor"></span></span>
+            <div class="search-input-wrapper">
+                <span class="search-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </span>
+                <span class="search-input" id="typedText"></span>
+                <span class="cursor" id="cursor"></span>
+            </div>
             <button class="search-btn" id="searchBtn">Search</button>
         </div>
 
-        <div class="arrow" id="arrow">&#8593;</div>
-
-        <div class="message" id="message">
-            Was that so hard?
+        <div class="feedback">
+            <div class="arrow" id="arrow">&#8593;</div>
+            <div class="message" id="message">Was that so hard?</div>
         </div>
-    </div>
+    </main>
+
+    <footer class="footer">
+        <a href="/">Let Me Wirecutter That For You</a> — A parody. Not affiliated with NYT.
+    </footer>
 
     <script>
         const query = @Html.Raw(Json.Serialize(Model.Query ?? ""));
@@ -168,31 +329,33 @@
             if (charIndex < query.length) {
                 typedText.textContent += query[charIndex];
                 charIndex++;
-                setTimeout(typeNextChar, 80 + Math.random() * 40);
+                setTimeout(typeNextChar, 65 + Math.random() * 45);
             } else {
                 cursor.style.display = 'none';
                 searchBtn.classList.add('visible');
-                setTimeout(showArrow, 500);
+                setTimeout(showArrow, 400);
             }
         }
 
         function showArrow() {
             arrow.classList.add('visible');
-            setTimeout(clickButton, 1500);
+            setTimeout(clickButton, 1000);
         }
 
         function clickButton() {
             arrow.classList.remove('visible');
-            searchBtn.style.transform = 'scale(0.95)';
+            searchBtn.style.transform = 'scale(0.97)';
+            searchBtn.style.background = '#a50119';
             setTimeout(() => {
                 searchBtn.style.transform = 'scale(1)';
+                searchBtn.style.background = '#c90223';
                 showMessage();
             }, 150);
         }
 
         function showMessage() {
             message.classList.add('visible');
-            setTimeout(redirect, 2000);
+            setTimeout(redirect, 1500);
         }
 
         function redirect() {
@@ -200,8 +363,7 @@
             window.location.href = 'https://www.nytimes.com/wirecutter/search/?s=' + encodedQuery;
         }
 
-        // Start the animation after a short delay
-        setTimeout(typeNextChar, 1000);
+        setTimeout(typeNextChar, 600);
     </script>
 </body>
 </html>

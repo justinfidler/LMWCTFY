@@ -5,11 +5,11 @@ namespace LMWCTFY.Pages;
 
 public class SearchModel : PageModel
 {
-    [BindProperty(SupportsGet = true)]
     public string? Query { get; set; }
 
-    public IActionResult OnGet()
+    public IActionResult OnGet([FromQuery(Name = "s")] string? s)
     {
+        Query = s;
         if (string.IsNullOrWhiteSpace(Query))
         {
             return RedirectToPage("/Index");
