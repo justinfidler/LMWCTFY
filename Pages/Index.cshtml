@@ -1,0 +1,52 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Let Me Wirecutter That For You";
+}
+
+<div class="lmwctfy-container">
+    <h1 class="title">Let Me Wirecutter That For You</h1>
+    <p class="subtitle">For all those people who find it <em>too hard</em> to search Wirecutter for themselves.</p>
+
+    <div class="search-form">
+        <input type="text" id="searchQuery" class="search-input" placeholder="Type your question here..." />
+        <button id="generateBtn" class="generate-btn">Generate Link</button>
+    </div>
+
+    <div id="linkResult" class="link-result" style="display: none;">
+        <p>Share this link:</p>
+        <input type="text" id="generatedLink" class="generated-link" readonly />
+        <button id="copyBtn" class="copy-btn">Copy</button>
+        <span id="copySuccess" class="copy-success" style="display: none;">Copied!</span>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    document.getElementById('generateBtn').addEventListener('click', function() {
+        const query = document.getElementById('searchQuery').value.trim();
+        if (query) {
+            const encodedQuery = encodeURIComponent(query);
+            const link = window.location.origin + '/Search?q=' + encodedQuery;
+            document.getElementById('generatedLink').value = link;
+            document.getElementById('linkResult').style.display = 'block';
+        }
+    });
+
+    document.getElementById('searchQuery').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            document.getElementById('generateBtn').click();
+        }
+    });
+
+    document.getElementById('copyBtn').addEventListener('click', function() {
+        const linkInput = document.getElementById('generatedLink');
+        linkInput.select();
+        navigator.clipboard.writeText(linkInput.value);
+        document.getElementById('copySuccess').style.display = 'inline';
+        setTimeout(() => {
+            document.getElementById('copySuccess').style.display = 'none';
+        }, 2000);
+    });
+</script>
+}

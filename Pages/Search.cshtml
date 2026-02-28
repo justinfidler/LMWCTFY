@@ -1,0 +1,207 @@
+@page
+@model SearchModel
+@{
+    ViewData["Title"] = "Searching...";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Let Me Wirecutter That For You</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            color: #e94560;
+            margin-bottom: 3rem;
+            font-weight: bold;
+        }
+
+        .search-box {
+            background: #fff;
+            border-radius: 24px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-icon {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            color: #333;
+            background: transparent;
+            min-width: 300px;
+        }
+
+        .search-btn {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .search-btn.visible {
+            opacity: 1;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: #333;
+            animation: blink 1s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @@keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .message {
+            margin-top: 3rem;
+            font-size: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .message.visible {
+            opacity: 1;
+        }
+
+        .arrow {
+            font-size: 3rem;
+            margin: 2rem 0;
+            opacity: 0;
+            animation: none;
+        }
+
+        .arrow.visible {
+            opacity: 1;
+            animation: bounce 0.5s ease-in-out infinite;
+        }
+
+        @@keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .wirecutter-badge {
+            display: inline-block;
+            background: #e94560;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            Let Me <span class="wirecutter-badge">Wirecutter</span> That For You
+        </div>
+
+        <div class="search-box">
+            <span class="search-icon">&#128269;</span>
+            <span class="search-input"><span id="typedText"></span><span class="cursor" id="cursor"></span></span>
+            <button class="search-btn" id="searchBtn">Search</button>
+        </div>
+
+        <div class="arrow" id="arrow">&#8593;</div>
+
+        <div class="message" id="message">
+            Was that so hard?
+        </div>
+    </div>
+
+    <script>
+        const query = @Html.Raw(Json.Serialize(Model.Query ?? ""));
+        const typedText = document.getElementById('typedText');
+        const cursor = document.getElementById('cursor');
+        const searchBtn = document.getElementById('searchBtn');
+        const arrow = document.getElementById('arrow');
+        const message = document.getElementById('message');
+
+        let charIndex = 0;
+
+        function typeNextChar() {
+            if (charIndex < query.length) {
+                typedText.textContent += query[charIndex];
+                charIndex++;
+                setTimeout(typeNextChar, 80 + Math.random() * 40);
+            } else {
+                cursor.style.display = 'none';
+                searchBtn.classList.add('visible');
+                setTimeout(showArrow, 500);
+            }
+        }
+
+        function showArrow() {
+            arrow.classList.add('visible');
+            setTimeout(clickButton, 1500);
+        }
+
+        function clickButton() {
+            arrow.classList.remove('visible');
+            searchBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                searchBtn.style.transform = 'scale(1)';
+                showMessage();
+            }, 150);
+        }
+
+        function showMessage() {
+            message.classList.add('visible');
+            setTimeout(redirect, 2000);
+        }
+
+        function redirect() {
+            const encodedQuery = encodeURIComponent(query);
+            window.location.href = 'https://www.nytimes.com/wirecutter/search/?s=' + encodedQuery;
+        }
+
+        // Start the animation after a short delay
+        setTimeout(typeNextChar, 1000);
+    </script>
+</body>
+</html>
